@@ -13,7 +13,8 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({ origin: ['http://localhost', 'http://localhost:5173'] }));
+// Enable CORS for all origins in production
+app.use(cors());
 app.use(express.json());
 
 // Request logger
