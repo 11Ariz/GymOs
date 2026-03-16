@@ -53,6 +53,12 @@ html, body, #root {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* App-like behavior */
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior-y: contain;
+  overflow-x: hidden;
 }
 
 /* Scrollbar */

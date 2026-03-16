@@ -10,7 +10,7 @@ const navItems = [
 
 export const BottomNav: React.FC = () => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden px-4 pb-4 pt-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden px-4 pb-[env(safe-area-inset-bottom)] pt-2 mb-4">
       <div className="glass border-white/10 bg-slate-900/80 backdrop-blur-2xl rounded-3xl flex items-center justify-around h-16 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
