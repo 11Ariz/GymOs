@@ -3,7 +3,7 @@
  * @param {{ name: string, plan: string, expiryDate: string, feeStatus: string }} member
  * @param {string} gymName
  */
-function emailTemplate(member, gymName = 'GymOS') {
+export function emailTemplate(member, gymName = 'GymOS') {
   const expiry = new Date(member.expiryDate);
   const today = new Date();
   const diffDays = Math.round((expiry - today) / (1000 * 60 * 60 * 24));
@@ -105,5 +105,3 @@ function emailTemplate(member, gymName = 'GymOS') {
 </body>
 </html>`;
 }
-
-module.exports = { emailTemplate };

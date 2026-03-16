@@ -1,6 +1,6 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const { emailTemplate } = require('../emailTemplate');
+import express from 'express';
+import nodemailer from 'nodemailer';
+import { emailTemplate } from '../emailTemplate.js';
 
 const router = express.Router();
 
@@ -73,4 +73,4 @@ router.post('/send-all', async (req, res) => {
   return res.json({ success: true, summary });
 });
 
-module.exports = router;
+export default router;
