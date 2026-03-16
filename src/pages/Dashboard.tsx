@@ -29,27 +29,37 @@ export const Dashboard: React.FC = () => {
   }, [members]);
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8">
-          value={stats.pending}
-          icon={<CreditCard size={20} color="var(--danger)" />}
-          iconBg="var(--danger-bg)"
-          iconGlow="rgba(239,68,68,0.3)"
-          delta={{ value: `${stats.paid} fees collected`, positive: true }}
-          delay={120}
+    <div className="flex flex-col gap-8">
+      {/* Stats Cards Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard 
+          label="Total Members" 
+          value={stats.total} 
+          icon={Users} 
+          color="indigo" 
         />
-        <StatCard
-          label="Total Active"
-          value={stats.active}
-          icon={<TrendingUp size={20} color="var(--success)" />}
-          iconBg="var(--success-bg)"
-          iconGlow="rgba(16,185,129,0.3)"
-          delta={{ value: `${members.length > 0 ? Math.round((stats.active / members.length) * 100) : 0}% retention rate`, positive: true }}
-          delay={180}
+        <StatCard 
+          label="Paid (This Month)" 
+          value={stats.paid} 
+          icon={CheckCircle} 
+          color="emerald" 
+        />
+        <StatCard 
+          label="Pending Payments" 
+          value={stats.pending} 
+          icon={CreditCard} 
+          color="rose" 
+        />
+        <StatCard 
+          label="Next 7 Days Expiry" 
+          value={stats.expiringSoon.length} 
+          icon={Clock} 
+          color="amber" 
         />
       </div>
 
       {/* Bottom row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Expiring Soon List */}
         <div className="glass p-6 animate-fadeIn" style={{ animationDelay: '120ms' }}>
           <div className="flex items-center justify-between mb-6">
