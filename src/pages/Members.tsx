@@ -60,31 +60,33 @@ export const Members: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* Toolbar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-        <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
-          <Search size={15} style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+        <div className="relative flex-1 group">
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
           <input
-            className="input"
-            placeholder="Search members..."
+            className="input pl-12"
+            placeholder="Search name, email, or phone..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            style={{ paddingLeft: 34, height: 36, fontSize: 13 }}
           />
         </div>
-        <select className="input" value={planFilter} onChange={e => setPlanFilter(e.target.value)} style={{ width: 'auto', minWidth: 120, height: 36, fontSize: 13 }}>
-          <option value="All">All Plans</option>
-          <option value="Monthly">Monthly</option>
-          <option value="Quarterly">Quarterly</option>
-          <option value="Yearly">Yearly</option>
-        </select>
-        <select className="input" value={feeFilter} onChange={e => setFeeFilter(e.target.value)} style={{ width: 'auto', minWidth: 110, height: 36, fontSize: 13 }}>
-          <option value="All">All Fees</option>
-          <option value="Paid">Paid</option>
-          <option value="Pending">Pending</option>
-        </select>
-        <button className="btn btn-primary" style={{ height: 36, fontSize: 13, whiteSpace: 'nowrap' }} onClick={() => { setEditingMember(null); setShowForm(true); }}>
-          <Plus size={15} /> Add Member
-        </button>
+        
+        <div className="flex flex-wrap items-center gap-3">
+          <select className="input flex-1 min-w-[140px] lg:w-40" value={planFilter} onChange={e => setPlanFilter(e.target.value)}>
+            <option value="All">All Plans</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Yearly">Yearly</option>
+          </select>
+          <select className="input flex-1 min-w-[130px] lg:w-36" value={feeFilter} onChange={e => setFeeFilter(e.target.value)}>
+            <option value="All">All Fees</option>
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+          </select>
+          <button className="btn btn-primary w-full sm:w-auto" onClick={() => { setEditingMember(null); setShowForm(true); }}>
+            <Plus size={18} /> <span>Add Member</span>
+          </button>
+        </div>
       </div>
 
       {/* Count */}

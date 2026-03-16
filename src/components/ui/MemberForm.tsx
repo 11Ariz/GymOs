@@ -55,23 +55,22 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
   return (
     <div className="overlay" onClick={onClose}>
       <div
-        className="glass animate-scaleIn"
+        className="glass animate-scaleIn w-full max-w-lg p-6 sm:p-8 relative m-auto"
         onClick={e => e.stopPropagation()}
-        style={{ width: '100%', maxWidth: 500, padding: '24px', position: 'relative' }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-          <h2 style={{ fontSize: 17, fontWeight: 700, margin: 0 }}>
-            {member ? 'Edit Member' : 'Add New Member'}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-extrabold text-white">
+            {member ? 'Edit Member' : 'New Member'}
           </h2>
           <button className="btn btn-secondary btn-icon" onClick={onClose}>
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Name + Phone */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group">
               <label>Full Name *</label>
               <input name="name" className="input" value={form.name} onChange={handleChange} placeholder="John Doe" required />
@@ -89,7 +88,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
           </div>
 
           {/* Plan + Fee Status */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group">
               <label>Plan *</label>
               <select name="plan" className="input" value={form.plan} onChange={handleChange} required>
@@ -108,14 +107,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
           </div>
 
           {/* Join Date + Auto Expiry preview */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="form-group">
               <label>Join Date *</label>
               <input name="joinDate" type="date" className="input" value={form.joinDate} onChange={handleChange} required />
             </div>
             <div className="form-group">
-              <label>Expiry Date <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>(auto)</span></label>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', cursor: 'default', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.04)' }}>
+              <label>Expiry Date <span className="text-[10px] text-slate-500">(auto)</span></label>
+              <div className="input flex items-center cursor-default text-slate-400 bg-white/5">
                 {expiryDate
                   ? new Date(expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
                   : '—'}
@@ -125,9 +124,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
 
           <hr className="divider" />
 
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn btn-primary">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end mt-4">
+            <button type="button" className="btn btn-secondary w-full sm:w-auto" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn btn-primary w-full sm:w-auto">
               {member ? 'Save Changes' : 'Add Member'}
             </button>
           </div>
