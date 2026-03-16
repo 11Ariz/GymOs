@@ -148,29 +148,29 @@ export const Reminders: React.FC = () => {
           {group.members.length === 0 ? (
             <p style={{ fontSize: 13, color: 'var(--text-muted)', fontStyle: 'italic' }}>No members in this category</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="flex flex-col gap-3">
               {group.members.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 rounded-xl border border-white/5 gap-3" style={{ background: group.bg }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+                  <div key={m._id} className="glass border-white/5 p-4 flex flex-col gap-4">
+                    <div className="flex items-center gap-4">
                       <img src={m.avatar || `https://i.pravatar.cc/150?u=${m._id}`} alt={m.name}
-                        style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                        className="w-12 h-12 rounded-2xl object-cover border border-white/10 shrink-0"
                       />
-                      <div style={{ minWidth: 0 }}>
-                        <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: 12, margin: 0 }}>
-                          {m.plan} · Expires {new Date(m.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white font-bold text-base truncate mb-0.5">{m.name}</p>
+                        <p className="text-slate-400 text-xs font-medium">
+                          {m.plan} • {new Date(m.expiryDate).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-none border-white/5">
-                      <div className="flex gap-2">
-                        <span className="badge text-[10px]" style={{ background: group.bg, color: group.color }}>
-                          {days < 0 ? `${Math.abs(days)}d ago` : days === 0 ? 'Today' : `${days}d left`}
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                      <div className="flex items-center gap-2">
+                        <span className={`badge text-[10px] font-bold ${days < 0 ? 'badge-danger' : 'badge-warning'}`}>
+                          {days < 0 ? `${Math.abs(days)}d Overdue` : days === 0 ? 'Expires Today' : `${days}d Remaining`}
                         </span>
-                        <span className={`badge ${m.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'} text-[10px]`}>
+                        <span className={`badge text-[10px] font-bold ${m.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'}`}>
                           {m.feeStatus}
                         </span>
                       </div>

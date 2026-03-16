@@ -13,13 +13,13 @@ interface StatCardProps {
 export const StatCard: React.FC<StatCardProps> = ({ label, value, icon, iconBg, iconGlow, delta, delay = 0 }) => {
   return (
     <div
-      className="glass animate-fadeIn p-6 flex flex-col gap-4"
+      className="glass animate-fadeIn p-4 sm:p-6 flex flex-col gap-3 sm:gap-4"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[13px] text-slate-400 font-medium">{label}</p>
-          <div className="text-3xl font-extrabold text-white leading-tight mt-1.5">
+        <div className="min-w-0">
+          <p className="text-[12px] sm:text-[13px] text-slate-400 font-medium truncate">{label}</p>
+          <div className="text-2xl sm:text-3xl font-extrabold text-white leading-tight mt-1 truncate">
             {value}
           </div>
         </div>
