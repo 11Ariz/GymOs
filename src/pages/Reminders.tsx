@@ -3,7 +3,7 @@ import { useMembers } from '../context/MemberContext';
 import { differenceInDays } from 'date-fns';
 import { BellRing, Clock, AlertOctagon, CheckCircle2, Send, Loader2 } from 'lucide-react';
 
-const API = import.meta.env.VITE_API_URL || '';
+import api from '../api';
 
 type SendState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -52,14 +52,12 @@ export const Reminders: React.FC = () => {
     }
     setSend(m._id, 'loading');
     try {
-      const res = await fetch(`${API}/api/email/send-reminder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: m.name, email: m.email, plan: m.plan, expiryDate: m.expiryDate, feeStatus: m.feeStatus }),
+      const { data } = await api.post('/api/email/send-reminder', { 
+        memberId: m._id 
       });
-      const data = await res.json();
       setSend(m._id, data.success ? 'success' : 'error');
-    } catch {
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to send');
       setSend(m._id, 'error');
     }
     setTimeout(() => setSend(m._id, 'idle'), 3500);
@@ -71,14 +69,12 @@ export const Reminders: React.FC = () => {
     if (withEmail.length === 0) return;
     setBulk(label, 'loading');
     try {
-      const res = await fetch(`${API}/api/email/send-all`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ members: withEmail.map(m => ({ name: m.name, email: m.email, plan: m.plan, expiryDate: m.expiryDate, feeStatus: m.feeStatus })) }),
+      const { data } = await api.post('/api/email/send-all', { 
+        memberIds: withEmail.map(m => m._id) 
       });
-      const data = await res.json();
       setBulk(label, data.success ? 'success' : 'error');
-    } catch {
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Bulk send failed');
       setBulk(label, 'error');
     }
     setTimeout(() => setBulk(label, 'idle'), 3500);

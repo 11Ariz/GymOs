@@ -10,14 +10,18 @@ const router = express.Router();
 router.use(protect);
 
 // Create reusable transporter
-const createTransporter = () =>
-  nodemailer.createTransport({
+const createTransporter = () => {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    throw new Error('Email credentials (GMAIL_USER/GMAIL_APP_PASSWORD) are missing in environment variables.');
+  }
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_APP_PASSWORD,
     },
   });
+};
 
 // Helper: send one email
 async function sendReminderEmail(member) {
