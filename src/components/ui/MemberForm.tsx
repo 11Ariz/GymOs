@@ -54,6 +54,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
 
   return (
     <div className="overlay items-end sm:items-center p-0 sm:p-4" onClick={onClose}>
+      <div
+        className="glass animate-slideUp sm:animate-scaleIn w-full max-w-lg p-6 sm:p-8 relative rounded-t-[32px] sm:rounded-3xl border-b-0 sm:border-b"
+        onClick={e => e.stopPropagation()}
+      >
         {/* Drag handle for mobile */}
         <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-6 sm:hidden" />
         {/* Header */}
