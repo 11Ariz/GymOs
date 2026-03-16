@@ -99,16 +99,9 @@ export const Members: React.FC = () => {
           <p>No members found. Try adjusting your filters.</p>
         </div>
       ) : (
-        <div className="glass" style={{ overflow: 'hidden', padding: 0 }}>
+        <div className="glass overflow-hidden p-0">
           {/* Header row */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr auto',
-            gap: 0,
-            padding: '10px 16px',
-            borderBottom: '1px solid var(--border)',
-            background: 'rgba(255,255,255,0.03)',
-          }}>
+          <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] gap-0 px-4 py-2.5 border-b border-white/5 bg-white/[0.02]">
             {['Member', 'Plan', 'Status', 'Expires', 'Fee', 'Actions'].map(h => (
               <span key={h} style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</span>
             ))}
@@ -120,15 +113,8 @@ export const Members: React.FC = () => {
             return (
               <div
                 key={member._id}
-                className="animate-fadeIn"
+                className="animate-fadeIn grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] gap-3 md:gap-0 items-center px-4 py-4 md:py-2.5 border-b border-white/5 last:border-none hover:bg-white/[0.02] transition-colors"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr auto',
-                  gap: 0,
-                  alignItems: 'center',
-                  padding: '11px 16px',
-                  borderBottom: i < filtered.length - 1 ? '1px solid var(--border)' : 'none',
-                  transition: 'background 0.15s',
                   animationDelay: `${i * 30}ms`,
                 }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
@@ -151,29 +137,40 @@ export const Members: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Plan */}
-                <span className={`badge ${getPlanBadgeClass(member.plan)}`} style={{ fontSize: 11 }}>{member.plan}</span>
+                {/* Plan - Hidden on very small screens, visible on md+ or logic below */}
+                <div className="flex md:block items-center justify-between gap-2">
+                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Plan</span>
+                  <span className={`badge ${getPlanBadgeClass(member.plan)} text-[10px] md:text-xs`}>{member.plan}</span>
+                </div>
 
                 {/* Status */}
-                <span className={`badge ${status.cls}`} style={{ fontSize: 11 }}>{status.label}</span>
+                <div className="flex md:block items-center justify-between gap-2">
+                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Status</span>
+                  <span className={`badge ${status.cls} text-[10px] md:text-xs`}>{status.label}</span>
+                </div>
 
                 {/* Expiry */}
-                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                  {new Date(member.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </span>
+                <div className="flex md:block items-center justify-between gap-2">
+                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Expires</span>
+                  <span className="text-xs md:text-[13px] text-slate-300">
+                    {new Date(member.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                    <span className="hidden lg:inline"> {new Date(member.expiryDate).getFullYear()}</span>
+                  </span>
+                </div>
 
                 {/* Fee toggle */}
-                <button
-                  className={`btn ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'}`}
-                  style={{ fontSize: 11, padding: '4px 10px', gap: 5, width: 'fit-content' }}
-                  onClick={() => toggleFeeStatus(member._id)}
-                  title="Toggle fee status"
-                >
-                  {member.feeStatus === 'Paid'
-                    ? <><CheckCircle size={11} color="var(--success)" /> Paid</>
-                    : <><Clock size={11} /> Pending</>
-                  }
-                </button>
+                <div className="flex md:block items-center justify-between gap-2">
+                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Fee</span>
+                  <button
+                    className={`btn ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'} h-7 md:h-8 px-2.5 md:px-3 text-[10px] md:text-xs w-fit`}
+                    onClick={() => toggleFeeStatus(member._id)}
+                  >
+                    {member.feeStatus === 'Paid'
+                      ? <><CheckCircle size={12} className="text-emerald-400" /> <span className="md:hidden lg:inline">Paid</span></>
+                      : <><Clock size={12} /> <span className="md:hidden lg:inline">Pending</span></>
+                    }
+                  </button>
+                </div>
 
                 {/* Actions */}
                 <div style={{ display: 'flex', gap: 6, marginLeft: 8 }}>
