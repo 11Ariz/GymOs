@@ -34,10 +34,10 @@
   --shadow-md: 0 4px 20px rgba(0,0,0,0.5);
   --shadow-glow: 0 0 40px var(--accent-glow);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
 
   --sidebar-width: 240px;
   --header-height: 64px;
@@ -71,17 +71,20 @@ html, body, #root {
 h1, h2, h3, h4 { color: var(--text-primary); font-weight: 700; line-height: 1.2; }
 p { color: var(--text-secondary); line-height: 1.6; }
 
-/* Glassmorphism card */
 .glass {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-radius: var(--radius-lg);
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 24px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glass:hover {
   background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
 /* Buttons */
@@ -172,7 +175,8 @@ select.input option {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 .form-group label {
   font-size: 13px;

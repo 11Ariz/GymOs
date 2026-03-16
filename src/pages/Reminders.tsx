@@ -148,11 +148,11 @@ export const Reminders: React.FC = () => {
           {group.members.length === 0 ? (
             <p style={{ fontSize: 13, color: 'var(--text-muted)', fontStyle: 'italic' }}>No members in this category</p>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-5">
               {group.members.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m._id} className="glass border-white/5 p-4 flex flex-col gap-4">
+                  <div key={m._id} className="glass border-white/5 p-5 flex flex-col gap-4">
                     <div className="flex items-center gap-4">
                       <img src={m.avatar || `https://i.pravatar.cc/150?u=${m._id}`} alt={m.name}
                         className="w-12 h-12 rounded-2xl object-cover border border-white/10 shrink-0"

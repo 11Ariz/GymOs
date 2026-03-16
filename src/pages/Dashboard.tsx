@@ -30,28 +30,6 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 md:gap-8">
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          label="Total Members"
-          value={stats.total}
-          icon={<Users size={20} color="var(--accent-light)" />}
-          iconBg="rgba(124,58,237,0.15)"
-          iconGlow="var(--accent-glow)"
-          delta={{ value: `${stats.active} currently active`, positive: true }}
-          delay={0}
-        />
-        <StatCard
-          label="Expiring Soon"
-          value={stats.expiringSoon.length}
-          icon={<AlertTriangle size={20} color="var(--warning)" />}
-          iconBg="var(--warning-bg)"
-          iconGlow="rgba(245,158,11,0.3)"
-          delta={{ value: 'Within next 7 days', positive: false }}
-          delay={60}
-        />
-        <StatCard
-          label="Pending Fees"
           value={stats.pending}
           icon={<CreditCard size={20} color="var(--danger)" />}
           iconBg="var(--danger-bg)"

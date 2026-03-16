@@ -158,8 +158,8 @@ export const Members: React.FC = () => {
                   </div>
 
                   {/* Mobile View (Card) */}
-                  <div className="md:hidden flex flex-col gap-4">
-                    <div className="flex items-center gap-4">
+                  <div className="md:hidden flex flex-col gap-5">
+                    <div className="glass p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5 group">
                       <img
                         src={member.avatar || `https://i.pravatar.cc/150?u=${member._id}`}
                         alt={member.name}
