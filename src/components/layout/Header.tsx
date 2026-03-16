@@ -2,10 +2,9 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useMembers } from '../../context/MemberContext';
 import { useAuth } from '../../context/AuthContext';
-import { Bell, Menu, LogOut } from 'lucide-react';
+import { Bell, LogOut } from 'lucide-react';
 
 interface HeaderProps {
-  onMenuClick: () => void;
 }
 
 const pageTitles: Record<string, string> = {
@@ -14,7 +13,7 @@ const pageTitles: Record<string, string> = {
   '/reminders': 'Reminders',
 };
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
   const { members } = useMembers();
   const { user, logout } = useAuth();
@@ -31,13 +30,6 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   return (
     <header className="h-16 md:h-20 shrink-0 border-b border-slate-800 px-4 md:px-8 bg-slate-900/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
       <div className="flex items-center gap-3">
-        {/* Mobile Hamburger */}
-        <button 
-          onClick={onMenuClick}
-          className="lg:hidden p-2 -ml-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
         <div>
           <h1 className="text-lg md:text-xl font-bold text-white shrink-0 truncate max-w-[150px] sm:max-w-xs">{title}</h1>
           <p className="text-xs text-slate-400 hidden sm:block">

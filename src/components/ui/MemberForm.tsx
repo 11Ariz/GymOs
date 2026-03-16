@@ -53,11 +53,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ member, onSave, onClose 
   };
 
   return (
-    <div className="overlay" onClick={onClose}>
-      <div
-        className="glass animate-scaleIn w-full max-w-lg p-6 sm:p-8 relative m-auto"
-        onClick={e => e.stopPropagation()}
-      >
+    <div className="overlay items-end sm:items-center p-0 sm:p-4" onClick={onClose}>
+        {/* Drag handle for mobile */}
+        <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-6 sm:hidden" />
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-extrabold text-white">

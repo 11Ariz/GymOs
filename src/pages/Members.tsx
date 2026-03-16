@@ -83,11 +83,19 @@ export const Members: React.FC = () => {
             <option value="Paid">Paid</option>
             <option value="Pending">Pending</option>
           </select>
-          <button className="btn btn-primary w-full sm:w-auto" onClick={() => { setEditingMember(null); setShowForm(true); }}>
+          <button className="btn btn-primary hidden lg:flex" onClick={() => { setEditingMember(null); setShowForm(true); }}>
             <Plus size={18} /> <span>Add Member</span>
           </button>
         </div>
       </div>
+
+      {/* Mobile FAB */}
+      <button 
+        className="lg:hidden fixed bottom-24 right-6 w-14 h-14 rounded-2xl bg-indigo-500 text-white shadow-[0_8px_30px_rgba(99,102,241,0.5)] flex items-center justify-center active:scale-95 transition-all z-40 border border-white/20"
+        onClick={() => { setEditingMember(null); setShowForm(true); }}
+      >
+        <Plus size={28} />
+      </button>
 
       {/* Count */}
       <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
