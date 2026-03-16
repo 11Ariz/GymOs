@@ -156,13 +156,7 @@ export const Reminders: React.FC = () => {
               {group.members.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m._id} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '10px 14px', background: group.bg,
-                    borderRadius: 'var(--radius-sm)',
-                    border: `1px solid ${group.color}33`,
-                    gap: 12,
-                  }}>
+                  <div key={m._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 rounded-xl border border-white/5 gap-3" style={{ background: group.bg }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
                       <img src={m.avatar || `https://i.pravatar.cc/150?u=${m._id}`} alt={m.name}
                         style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
@@ -175,13 +169,15 @@ export const Reminders: React.FC = () => {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                      <span className="badge" style={{ background: group.bg, color: group.color }}>
-                        {days < 0 ? `${Math.abs(days)}d ago` : days === 0 ? 'Today' : `${days}d left`}
-                      </span>
-                      <span className={`badge ${m.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'}`}>
-                        {m.feeStatus}
-                      </span>
+                    <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-none border-white/5">
+                      <div className="flex gap-2">
+                        <span className="badge text-[10px]" style={{ background: group.bg, color: group.color }}>
+                          {days < 0 ? `${Math.abs(days)}d ago` : days === 0 ? 'Today' : `${days}d left`}
+                        </span>
+                        <span className={`badge ${m.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'} text-[10px]`}>
+                          {m.feeStatus}
+                        </span>
+                      </div>
                       <SendBtn id={m._id} member={m} />
                     </div>
                   </div>
