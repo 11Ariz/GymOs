@@ -13,35 +13,28 @@ interface StatCardProps {
 export const StatCard: React.FC<StatCardProps> = ({ label, value, icon, iconBg, iconGlow, delta, delay = 0 }) => {
   return (
     <div
-      className="glass animate-fadeIn"
-      style={{
-        padding: '22px 24px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        animationDelay: `${delay}ms`,
-      }}
+      className="glass animate-fadeIn p-6 flex flex-col gap-4"
+      style={{ animationDelay: `${delay}ms` }}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+      <div className="flex items-start justify-between">
         <div>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, margin: 0 }}>{label}</p>
-          <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.2, marginTop: 6 }}>
+          <p className="text-[13px] text-slate-400 font-medium">{label}</p>
+          <div className="text-3xl font-extrabold text-white leading-tight mt-1.5">
             {value}
           </div>
         </div>
-        <div style={{
-          width: 44, height: 44,
-          borderRadius: '12px',
-          background: iconBg ?? 'var(--accent-glow)',
-          boxShadow: `0 0 20px ${iconGlow ?? 'var(--accent-glow)'}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}>
+        <div 
+          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/5 shadow-xl"
+          style={{
+            background: iconBg ?? 'var(--accent-glow)',
+            boxShadow: `0 0 20px ${iconGlow ?? 'var(--accent-glow)'}`,
+          }}
+        >
           {icon}
         </div>
       </div>
       {delta && (
-        <p style={{ fontSize: 12, color: delta.positive ? 'var(--success)' : 'var(--warning)', margin: 0, fontWeight: 500 }}>
+        <p className={`text-xs font-semibold ${delta.positive ? 'text-emerald-400' : 'text-amber-400'}`}>
           {delta.value}
         </p>
       )}
