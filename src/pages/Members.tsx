@@ -113,77 +113,85 @@ export const Members: React.FC = () => {
           {filtered.map((member, i) => {
             const status = getMemberStatus(member.expiryDate);
             return (
-              <div
-                key={member._id}
-                className="animate-fadeIn grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] gap-3 md:gap-0 items-center px-4 py-4 md:py-2.5 border-b border-white/5 last:border-none hover:bg-white/[0.02] transition-colors"
-                style={{
-                  animationDelay: `${i * 30}ms`,
-                }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                {/* Member info */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                  <img
-                    src={member.avatar || `https://i.pravatar.cc/150?u=${member._id}`}
-                    alt={member.name}
-                    style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--border)', flexShrink: 0 }}
-                  />
-                  <div style={{ minWidth: 0 }}>
-                    <p style={{ fontWeight: 600, fontSize: 13, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text-primary)' }}>
-                      {member.name}
-                    </p>
-                    <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {member.email || member.phone}
-                    </p>
+                <div
+                  key={member._id}
+                  className="animate-fadeIn p-4 border-b border-white/5 last:border-none hover:bg-white/[0.02] transition-colors"
+                  style={{ animationDelay: `${i * 30}ms` }}
+                >
+                  {/* Desktop View (Horizontal) */}
+                  <div className="hidden md:grid md:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] items-center gap-0">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={member.avatar || `https://i.pravatar.cc/150?u=${member._id}`}
+                        alt={member.name}
+                        className="w-9 h-9 rounded-full object-cover border border-white/10 shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <p className="font-bold text-[13px] text-white truncate">{member.name}</p>
+                        <p className="text-[11px] text-slate-500 truncate">{member.email || member.phone}</p>
+                      </div>
+                    </div>
+                    <span className={`badge ${getPlanBadgeClass(member.plan)} text-[11px] w-fit`}>{member.plan}</span>
+                    <span className={`badge ${status.cls} text-[11px] w-fit`}>{status.label}</span>
+                    <span className="text-[13px] text-slate-300">
+                      {new Date(member.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </span>
+                    <button
+                      className={`btn h-8 px-3 text-xs w-fit ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'}`}
+                      onClick={() => toggleFeeStatus(member._id)}
+                    >
+                      {member.feeStatus === 'Paid' ? <CheckCircle size={14} className="text-emerald-400" /> : <Clock size={14} />}
+                      <span className="lg:inline">{member.feeStatus}</span>
+                    </button>
+                    <div className="flex gap-2 ml-4">
+                      <button className="btn btn-secondary btn-icon h-8 w-8" onClick={() => handleEdit(member)}><Pencil size={14} /></button>
+                      <button className="btn btn-danger btn-icon h-8 w-8" onClick={() => setDeletingId(member._id)}><Trash2 size={14} /></button>
+                    </div>
+                  </div>
+
+                  {/* Mobile View (Card) */}
+                  <div className="md:hidden flex flex-col gap-4">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={member.avatar || `https://i.pravatar.cc/150?u=${member._id}`}
+                        alt={member.name}
+                        className="w-12 h-12 rounded-2xl object-cover border border-white/10"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-base text-white truncate">{member.name}</p>
+                        <p className="text-sm text-slate-500 truncate">{member.email || member.phone}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="btn btn-secondary btn-icon h-10 w-10" onClick={() => handleEdit(member)}><Pencil size={16} /></button>
+                        <button className="btn btn-danger btn-icon h-10 w-10" onClick={() => setDeletingId(member._id)}><Trash2 size={16} /></button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-white/5 border border-white/5 rounded-2xl p-3">
+                        <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">Membership</p>
+                        <div className="flex items-center justify-between">
+                          <span className={`badge ${getPlanBadgeClass(member.plan)} text-[11px]`}>{member.plan}</span>
+                          <span className={`badge ${status.cls} text-[11px]`}>{status.label}</span>
+                        </div>
+                      </div>
+                      <div className="bg-white/5 border border-white/5 rounded-2xl p-3">
+                        <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">Expiry</p>
+                        <p className="text-sm font-semibold text-slate-200">
+                           {new Date(member.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      className={`btn w-full justify-center h-11 ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'}`}
+                      onClick={() => toggleFeeStatus(member._id)}
+                    >
+                      {member.feeStatus === 'Paid' ? <CheckCircle size={18} className="text-emerald-400" /> : <Clock size={18} />}
+                      <span className="font-bold">Status: {member.feeStatus}</span>
+                    </button>
                   </div>
                 </div>
-
-                {/* Plan - Hidden on very small screens, visible on md+ or logic below */}
-                <div className="flex md:block items-center justify-between gap-2">
-                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Plan</span>
-                  <span className={`badge ${getPlanBadgeClass(member.plan)} text-[10px] md:text-xs`}>{member.plan}</span>
-                </div>
-
-                {/* Status */}
-                <div className="flex md:block items-center justify-between gap-2">
-                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Status</span>
-                  <span className={`badge ${status.cls} text-[10px] md:text-xs`}>{status.label}</span>
-                </div>
-
-                {/* Expiry */}
-                <div className="flex md:block items-center justify-between gap-2">
-                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Expires</span>
-                  <span className="text-xs md:text-[13px] text-slate-300">
-                    {new Date(member.expiryDate).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
-                    <span className="hidden lg:inline"> {new Date(member.expiryDate).getFullYear()}</span>
-                  </span>
-                </div>
-
-                {/* Fee toggle */}
-                <div className="flex md:block items-center justify-between gap-2">
-                  <span className="md:hidden text-[10px] text-slate-500 uppercase font-bold tracking-wider">Fee</span>
-                  <button
-                    className={`btn ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'} h-7 md:h-8 px-2.5 md:px-3 text-[10px] md:text-xs w-fit`}
-                    onClick={() => toggleFeeStatus(member._id)}
-                  >
-                    {member.feeStatus === 'Paid'
-                      ? <><CheckCircle size={12} className="text-emerald-400" /> <span className="md:hidden lg:inline">Paid</span></>
-                      : <><Clock size={12} /> <span className="md:hidden lg:inline">Pending</span></>
-                    }
-                  </button>
-                </div>
-
-                {/* Actions */}
-                <div style={{ display: 'flex', gap: 6, marginLeft: 8 }}>
-                  <button className="btn btn-secondary btn-icon" title="Edit" style={{ width: 28, height: 28 }} onClick={() => handleEdit(member)}>
-                    <Pencil size={13} />
-                  </button>
-                  <button className="btn btn-danger btn-icon" title="Delete" style={{ width: 28, height: 28 }} onClick={() => setDeletingId(member._id)}>
-                    <Trash2 size={13} />
-                  </button>
-                </div>
-              </div>
             );
           })}
         </div>

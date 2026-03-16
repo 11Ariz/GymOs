@@ -73,43 +73,40 @@ export const Dashboard: React.FC = () => {
       {/* Bottom row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Expiring Soon List */}
-        <div className="glass animate-fadeIn" style={{ padding: 24, animationDelay: '120ms' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Clock size={18} color="var(--warning)" />
-              <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Expiring Soon</h3>
+        <div className="glass p-6 animate-fadeIn" style={{ animationDelay: '120ms' }}>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2.5">
+              <Clock className="w-5 h-5 text-amber-400" />
+              <h3 className="text-base font-bold text-white">Expiring Soon</h3>
             </div>
             <button
-              className="btn btn-secondary"
-              style={{ fontSize: 12, padding: '6px 12px' }}
+              className="btn btn-secondary h-8 px-3 text-xs"
               onClick={() => navigate('/reminders')}
             >
               View All <ArrowRight size={14} />
             </button>
           </div>
           {stats.expiringSoon.length === 0 ? (
-            <div className="empty-state" style={{ padding: '32px 16px' }}>
-              <CheckCircle size={36} color="var(--success)" style={{ opacity: 0.6 }} />
-              <p>No memberships expiring in the next 7 days 🎉</p>
+            <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-emerald-400" />
+              </div>
+              <p className="text-slate-400 text-sm">No memberships expiring soon 🎉</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div className="flex flex-col gap-3">
               {stats.expiringSoon.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m._id} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '10px 14px', background: 'var(--warning-bg)',
-                    borderRadius: 'var(--radius-sm)', border: '1px solid rgba(245,158,11,0.2)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <img src={m.avatar} alt={m.name} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
-                      <div>
-                        <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 600, margin: 0 }}>{m.name}</p>
-                        <p style={{ color: 'var(--text-muted)', fontSize: 11, margin: 0 }}>{m.plan}</p>
+                  <div key={m._id} className="flex items-center justify-between p-3 bg-amber-500/10 border border-amber-500/10 rounded-xl">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img src={m.avatar} alt={m.name} className="w-9 h-9 rounded-xl object-cover border border-white/5" />
+                      <div className="min-w-0">
+                        <p className="text-white text-[13px] font-bold truncate">{m.name}</p>
+                        <p className="text-slate-500 text-[11px] truncate">{m.plan}</p>
                       </div>
                     </div>
-                    <span className="badge badge-warning">
+                    <span className="badge badge-warning text-[10px] font-bold">
                       {days === 0 ? 'Today' : `${days}d left`}
                     </span>
                   </div>
@@ -120,11 +117,11 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Plan Breakdown & Fee Status */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="flex flex-col gap-4">
           {/* Plan cards */}
-          <div className="glass animate-fadeIn" style={{ padding: 24, animationDelay: '180ms' }}>
-            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Plan Breakdown</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="glass p-6 animate-fadeIn" style={{ animationDelay: '180ms' }}>
+            <h3 className="text-base font-bold text-white mb-6">Plan Breakdown</h3>
+            <div className="flex flex-col gap-4">
               {([
                 { label: 'Monthly', count: planBreakdown.monthly, color: 'var(--accent-light)' },
                 { label: 'Quarterly', count: planBreakdown.quarterly, color: 'var(--accent-2)' },
@@ -133,16 +130,12 @@ export const Dashboard: React.FC = () => {
                 const pct = members.length > 0 ? (count / members.length) * 100 : 0;
                 return (
                   <div key={label}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                      <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{label}</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color }}>{count}</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-slate-400">{label}</span>
+                      <span className="text-sm font-bold" style={{ color }}>{count}</span>
                     </div>
-                    <div style={{ height: 6, background: 'var(--border)', borderRadius: 99, overflow: 'hidden' }}>
-                      <div style={{
-                        height: '100%', width: `${pct}%`, background: color,
-                        borderRadius: 99, transition: 'width 0.6s ease',
-                        boxShadow: `0 0 8px ${color}`,
-                      }} />
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-700 ease-out shadow-[0_0_12px_rgba(255,255,255,0.1)]" style={{ width: `${pct}%`, background: color }} />
                     </div>
                   </div>
                 );
@@ -151,24 +144,16 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Fee status */}
-          <div className="glass animate-fadeIn" style={{ padding: 24, animationDelay: '240ms' }}>
-            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Fee Status</h3>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <div style={{
-                flex: 1, padding: '14px', background: 'var(--success-bg)',
-                borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16,185,129,0.2)',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--success)' }}>{stats.paid}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Paid</div>
+          <div className="glass p-6 animate-fadeIn" style={{ animationDelay: '240ms' }}>
+            <h3 className="text-base font-bold text-white mb-6">Fee Status Overview</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-4 bg-emerald-500/10 border border-emerald-500/10 rounded-2xl text-center">
+                <div className="text-2xl font-black text-emerald-400">{stats.paid}</div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-1">Paid</div>
               </div>
-              <div style={{
-                flex: 1, padding: '14px', background: 'var(--danger-bg)',
-                borderRadius: 'var(--radius-sm)', border: '1px solid rgba(239,68,68,0.2)',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--danger)' }}>{stats.pending}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Pending</div>
+              <div className="p-4 bg-rose-500/10 border border-rose-500/10 rounded-2xl text-center">
+                <div className="text-2xl font-black text-rose-400">{stats.pending}</div>
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-1">Pending</div>
               </div>
             </div>
           </div>
