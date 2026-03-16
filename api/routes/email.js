@@ -1,8 +1,13 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import { emailTemplate } from '../emailTemplate.js';
+import { protect } from '../middleware/auth.js';
+import Member from '../models/Member.js';
 
 const router = express.Router();
+
+// Protect all email routes
+router.use(protect);
 
 // Create reusable transporter
 const createTransporter = () =>
@@ -31,34 +36,50 @@ async function sendReminderEmail(member) {
 
 // POST /api/email/send-reminder  — single member
 router.post('/send-reminder', async (req, res) => {
-  const { name, email, plan, expiryDate, feeStatus } = req.body;
+  const { memberId } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ success: false, error: 'Member has no email address.' });
+  if (!memberId) {
+    return res.status(400).json({ success: false, error: 'Member ID is required.' });
   }
 
   try {
-    await sendReminderEmail({ name, email, plan, expiryDate, feeStatus });
-    return res.json({ success: true, message: `Reminder sent to ${email}` });
+    // Verify member belongs to this gym owner
+    const member = await Member.findOne({ _id: memberId, gymOwnerId: req.user._id });
+    if (!member) {
+      return res.status(404).json({ success: false, error: 'Member not found or unauthorized.' });
+    }
+    if (!member.email) {
+      return res.status(400).json({ success: false, error: 'Member has no email address.' });
+    }
+
+    await sendReminderEmail(member);
+    return res.json({ success: true, message: `Reminder sent to ${member.email}` });
+    
   } catch (err) {
     console.error('❌ Send reminder error:', err.message);
-    console.error('   Gmail user:', process.env.GMAIL_USER);
-    console.error('   App password set:', !!process.env.GMAIL_APP_PASSWORD);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
 
+
 // POST /api/email/send-all  — array of members
 router.post('/send-all', async (req, res) => {
-  const { members } = req.body;
+  const { memberIds } = req.body;
 
-  if (!Array.isArray(members) || members.length === 0) {
+  if (!Array.isArray(memberIds) || memberIds.length === 0) {
     return res.status(400).json({ success: false, error: 'No members provided.' });
   }
 
-  const results = await Promise.allSettled(
-    members.map(m => sendReminderEmail(m))
-  );
+  try {
+    // Fetch all confirmed members belonging to this gym
+    const members = await Member.find({ 
+      _id: { $in: memberIds },
+      gymOwnerId: req.user._id 
+    });
+
+    const results = await Promise.allSettled(
+      members.map(m => sendReminderEmail(m))
+    );
 
   const summary = results.map((r, i) => ({
     name: members[i].name,
@@ -71,6 +92,11 @@ router.post('/send-all', async (req, res) => {
   console.log(`Sent ${successCount}/${members.length} reminder emails.`);
 
   return res.json({ success: true, summary });
+    
+  } catch (err) {
+    console.error('❌ Send all reminders error:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 export default router;

@@ -1,96 +1,106 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { Member } from '../types';
+import api from '../api';
+import { useAuth } from './AuthContext';
+import toast from 'react-hot-toast';
 
 interface MemberContextType {
   members: Member[];
-  addMember: (member: Omit<Member, 'id'>) => void;
-  updateMember: (id: string, member: Partial<Member>) => void;
-  deleteMember: (id: string) => void;
-  toggleFeeStatus: (id: string) => void;
+  loading: boolean;
+  fetchMembers: () => Promise<void>;
+  addMember: (member: Omit<Member, '_id'>) => Promise<boolean>;
+  updateMember: (id: string, member: Partial<Member>) => Promise<boolean>;
+  deleteMember: (id: string) => Promise<boolean>;
+  toggleFeeStatus: (id: string) => Promise<boolean>;
 }
-
-const initialMembers: Member[] = [
-  {
-    id: '1',
-    name: 'Alex Johnson',
-    email: 'alex.j@example.com',
-    phone: '+1 234-567-8901',
-    plan: 'Yearly',
-    joinDate: '2025-01-15',
-    expiryDate: '2026-01-15',
-    feeStatus: 'Paid',
-    avatar: 'https://i.pravatar.cc/150?u=1'
-  },
-  {
-    id: '2',
-    name: 'Sarah Smith',
-    email: 'sarah.s@example.com',
-    phone: '+1 234-567-8902',
-    plan: 'Monthly',
-    joinDate: '2026-02-10',
-    expiryDate: '2026-03-10',
-    feeStatus: 'Pending',
-    avatar: 'https://i.pravatar.cc/150?u=2'
-  },
-  {
-    id: '3',
-    name: 'Mike Brown',
-    email: 'mike.b@example.com',
-    phone: '+1 234-567-8903',
-    plan: 'Quarterly',
-    joinDate: '2025-12-05',
-    expiryDate: '2026-03-05',
-    feeStatus: 'Paid',
-    avatar: 'https://i.pravatar.cc/150?u=3'
-  }
-];
-
-const STORAGE_KEY = 'gymOS_members';
 
 const MemberContext = createContext<MemberContextType | undefined>(undefined);
 
 export const MemberProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [members, setMembers] = useState<Member[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? (JSON.parse(stored) as Member[]) : initialMembers;
-    } catch {
-      return initialMembers;
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
+  const fetchMembers = useCallback(async () => {
+    if (!user || user.role !== 'GYM_OWNER') {
+      setMembers([]);
+      return;
     }
-  });
+    setLoading(true);
+    try {
+      const { data } = await api.get('/api/members');
+      if (data.success) setMembers(data.members);
+    } catch (error) {
+      console.error('Failed to fetch members:', error);
+      toast.error('Failed to load members');
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
-  }, [members]);
+    fetchMembers();
+  }, [fetchMembers]);
 
-  const addMember = (memberData: Omit<Member, 'id'>) => {
-    const newMember: Member = {
-      ...memberData,
-      id: Math.random().toString(36).substr(2, 9),
-    };
-    setMembers(prev => [...prev, newMember]);
-  };
-
-  const updateMember = (id: string, updatedData: Partial<Member>) => {
-    setMembers(prev => prev.map(m => m.id === id ? { ...m, ...updatedData } : m));
-  };
-
-  const deleteMember = (id: string) => {
-    setMembers(prev => prev.filter(m => m.id !== id));
-  };
-
-  const toggleFeeStatus = (id: string) => {
-    setMembers(prev => prev.map(m => {
-      if (m.id === id) {
-        return { ...m, feeStatus: m.feeStatus === 'Paid' ? 'Pending' : 'Paid' };
+  const addMember = async (memberData: Omit<Member, '_id'>) => {
+    try {
+      const { data } = await api.post('/api/members', memberData);
+      if (data.success) {
+        setMembers(prev => [...prev, data.member]);
+        toast.success('Member added successfully');
+        return true;
       }
-      return m;
-    }));
+      return false;
+    } catch (error) {
+      console.error('Add member error:', error);
+      toast.error('Failed to add member');
+      return false;
+    }
+  };
+
+  const updateMember = async (id: string, updatedData: Partial<Member>) => {
+    try {
+      const { data } = await api.put(`/api/members/${id}`, updatedData);
+      if (data.success) {
+        setMembers(prev => prev.map(m => m._id === id ? data.member : m));
+        toast.success('Member updated');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Update member error:', error);
+      toast.error('Failed to update member');
+      return false;
+    }
+  };
+
+  const deleteMember = async (id: string) => {
+    try {
+      const { data } = await api.delete(`/api/members/${id}`);
+      if (data.success) {
+        setMembers(prev => prev.filter(m => m._id !== id));
+        toast.success('Member deleted');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Delete member error:', error);
+      toast.error('Failed to delete member');
+      return false;
+    }
+  };
+
+  const toggleFeeStatus = async (id: string) => {
+    const member = members.find(m => m._id === id);
+    if (!member) return false;
+    
+    const newStatus = member.feeStatus === 'Paid' ? 'Pending' : 'Paid';
+    return await updateMember(id, { feeStatus: newStatus });
   };
 
   return (
-    <MemberContext.Provider value={{ members, addMember, updateMember, deleteMember, toggleFeeStatus }}>
+    <MemberContext.Provider value={{ members, loading, fetchMembers, addMember, updateMember, deleteMember, toggleFeeStatus }}>
       {children}
     </MemberContext.Provider>
   );

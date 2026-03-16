@@ -1,6 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, BellRing, Dumbbell } from 'lucide-react';
+import { LayoutDashboard, Users, BellRing, Dumbbell, X } from 'lucide-react';
+
+interface SidebarProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -8,64 +13,51 @@ const navItems = [
   { to: '/reminders', icon: BellRing, label: 'Reminders' },
 ];
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   return (
-    <aside style={{
-      width: 'var(--sidebar-width)',
-      minWidth: 'var(--sidebar-width)',
-      background: 'var(--bg-sidebar)',
-      borderRight: '1px solid var(--border)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '20px 0',
-    }}>
-      {/* Logo */}
-      <div style={{
-        padding: '0 20px 24px',
-        borderBottom: '1px solid var(--border)',
-        marginBottom: '16px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: 36, height: 36,
-            background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
-            borderRadius: '10px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 20px var(--accent-glow)',
-          }}>
-            <Dumbbell size={18} color="white" />
+    <aside className={`
+      fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800
+      transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      flex flex-col py-6 shadow-2xl lg:shadow-none
+    `}>
+      {/* Header & Logo */}
+      <div className="px-6 pb-6 border-b border-slate-800 mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <Dumbbell className="text-white w-5 h-5" />
           </div>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)' }}>GymOS</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 500 }}>Membership Manager</div>
+            <div className="text-lg font-bold text-white leading-tight">GymOS</div>
+            <div className="text-xs font-medium text-slate-400">Owner Portal</div>
           </div>
         </div>
+        {/* Mobile Close Button */}
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
-      {/* Nav */}
-      <nav style={{ flex: 1, padding: '0 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      {/* Navigation */}
+      <nav className="flex-1 px-4 flex flex-col gap-1">
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
-            style={({ isActive }) => ({
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '10px 12px',
-              borderRadius: 'var(--radius-sm)',
-              textDecoration: 'none',
-              fontSize: '14px',
-              fontWeight: isActive ? 600 : 500,
-              color: isActive ? 'var(--accent-light)' : 'var(--text-secondary)',
-              background: isActive ? 'rgba(124,58,237,0.12)' : 'transparent',
-              border: `1px solid ${isActive ? 'rgba(124,58,237,0.25)' : 'transparent'}`,
-              transition: 'all 0.15s ease',
-            })}
+            onClick={() => setIsOpen(false)}
+            className={({ isActive }) => `
+              flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-medium text-sm
+              ${isActive 
+                ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
+                : 'text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent'}
+            `}
           >
             {({ isActive }) => (
               <>
-                <Icon size={18} style={{ opacity: isActive ? 1 : 0.7 }} />
+                <Icon className={`w-5 h-5 ${isActive ? 'opacity-100' : 'opacity-70'}`} />
                 {label}
               </>
             )}
@@ -74,13 +66,9 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       {/* Footer */}
-      <div style={{
-        padding: '16px 20px 0',
-        borderTop: '1px solid var(--border)',
-        marginTop: '12px',
-      }}>
-        <div style={{ fontSize: 11, color: 'var(--text-muted)', textAlign: 'center' }}>
-          © 2026 GymOS v1.0
+      <div className="px-6 pt-4 border-t border-slate-800 mt-4">
+        <div className="text-xs text-center text-slate-500">
+          © {new Date().getFullYear()} GymOS SaaS
         </div>
       </div>
     </aside>

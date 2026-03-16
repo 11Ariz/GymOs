@@ -1,7 +1,12 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useMembers } from '../../context/MemberContext';
-import { Bell } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { Bell, Menu, LogOut } from 'lucide-react';
+
+interface HeaderProps {
+  onMenuClick: () => void;
+}
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -9,9 +14,10 @@ const pageTitles: Record<string, string> = {
   '/reminders': 'Reminders',
 };
 
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const location = useLocation();
   const { members } = useMembers();
+  const { user, logout } = useAuth();
   const title = pageTitles[location.pathname] ?? 'GymOS';
 
   const today = new Date();
@@ -20,48 +26,50 @@ export const Header: React.FC = () => {
     return days <= 7 && days >= 0;
   }).length;
 
+  const getInitials = (name?: string) => name ? name.substring(0, 2).toUpperCase() : 'GO';
+
   return (
-    <header style={{
-      height: 'var(--header-height)',
-      borderBottom: '1px solid var(--border)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 32px',
-      background: 'rgba(10,11,15,0.8)',
-      backdropFilter: 'blur(12px)',
-      flexShrink: 0,
-    }}>
-      <div>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{title}</h1>
-        <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0, marginTop: 2 }}>
-          {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
+    <header className="h-16 md:h-20 shrink-0 border-b border-slate-800 px-4 md:px-8 bg-slate-900/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
+      <div className="flex items-center gap-3">
+        {/* Mobile Hamburger */}
+        <button 
+          onClick={onMenuClick}
+          className="lg:hidden p-2 -ml-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div>
+          <h1 className="text-lg md:text-xl font-bold text-white shrink-0 truncate max-w-[150px] sm:max-w-xs">{title}</h1>
+          <p className="text-xs text-slate-400 hidden sm:block">
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          </p>
+        </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {/* Notification bell */}
-        <button className="btn btn-secondary btn-icon" style={{ position: 'relative' }} title="Expiring memberships">
-          <Bell size={18} />
+
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
+        <button className="relative p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition" title="Expiring memberships">
+          <Bell className="w-5 h-5" />
           {expiringSoon > 0 && (
-            <span style={{
-              position: 'absolute', top: 6, right: 6,
-              width: 8, height: 8,
-              borderRadius: '50%',
-              background: 'var(--warning)',
-              border: '1px solid var(--bg-primary)',
-            }} />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 border-2 border-slate-900" />
           )}
         </button>
-        {/* Avatar placeholder */}
-        <div style={{
-          width: 36, height: 36, borderRadius: '50%',
-          background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 13, fontWeight: 700, color: 'white', cursor: 'pointer',
-          boxShadow: '0 0 15px var(--accent-glow)',
-          flexShrink: 0,
-        }}>
-          GO
+        
+        {/* User Info & Avatar */}
+        <div className="flex items-center gap-3 pl-2 md:pl-4 border-l border-slate-800">
+          <div className="hidden md:flex flex-col items-end">
+            <span className="text-sm font-semibold text-white">{user?.gymName || 'Gym Owner'}</span>
+            <span className="text-xs text-slate-400">{user?.email}</span>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-indigo-500/20">
+            {getInitials(user?.gymName)}
+          </div>
+          <button 
+            onClick={logout}
+            className="p-2 text-slate-400 hover:text-rose-400 rounded-xl hover:bg-slate-800 transition ml-1"
+            title="Logout"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </header>
