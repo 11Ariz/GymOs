@@ -41,11 +41,12 @@ export const Login: React.FC = () => {
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-slate-900 border border-slate-700 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-            <Dumbbell className="text-indigo-400 w-8 h-8" />
+          <div className="w-16 h-16 bg-slate-900 border border-slate-700 rounded-2xl flex items-center justify-center mb-6 shadow-xl relative group">
+            <div className="absolute inset-0 bg-indigo-500/10 blur-xl rounded-full group-hover:bg-indigo-500/20 transition-all" />
+            <Dumbbell className="text-indigo-400 w-8 h-8 relative z-10" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Access Portal</h1>
-          <p className="text-slate-400 text-sm mt-1">Sign in to manage your gym</p>
+          <h1 className="text-3xl font-black text-white tracking-tight">Access Portal</h1>
+          <p className="text-slate-400 text-base mt-2 font-medium">Sign in to your gym account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

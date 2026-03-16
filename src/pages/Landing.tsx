@@ -8,41 +8,47 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-50 overflow-hidden font-sans">
       {/* Navbar */}
-      <nav className="flex items-center justify-between p-4 md:px-8 border-b border-white/10 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <Dumbbell className="text-indigo-400 w-8 h-8" />
-          <span className="text-xl font-bold tracking-tight">GymOS</span>
+      <nav className="flex items-center justify-between h-16 px-4 md:px-8 border-b border-white/5 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-2 pr-4">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+            <Dumbbell className="text-indigo-400 w-5 h-5" />
+          </div>
+          <span className="text-lg font-bold tracking-tight text-white">GymOS</span>
         </div>
         <button 
           onClick={() => navigate('/login')}
-          className="px-5 py-2 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg transition-colors"
+          className="inline-flex items-center justify-center px-4 py-1.5 text-xs font-semibold text-white bg-indigo-500 hover:bg-indigo-600 rounded-full transition-all active:scale-95 whitespace-nowrap"
         >
           Login
         </button>
       </nav>
 
       {/* Hero Section - Mobile Optimized */}
-      <main className="flex flex-col items-center justify-center pt-24 pb-16 px-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-sm font-medium mb-8">
-          <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-          The future of Gym Management
+      <main className="relative flex flex-col items-center justify-center px-4 pt-20 pb-24 md:pt-32 md:pb-40 text-center">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full -z-10 animate-pulse" />
+        
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-[11px] md:text-xs font-semibold uppercase tracking-wider mb-8 animate-fadeIn">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_var(--accent-light)]" />
+          Next Generation Gym ERP
         </div>
         
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-4xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 mb-6 leading-tight">
-          Manage your gym members <br className="hidden md:block"/> effortlessly.
+        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight max-w-5xl text-white mb-8 leading-[1.1] animate-fadeIn">
+          Manage your gym <br className="hidden sm:block"/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">effortlessly.</span>
         </h1>
         
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-12">
+        <p className="text-slate-400 text-base md:text-lg lg:text-xl max-w-2xl mb-12 leading-relaxed animate-fadeIn" style={{ animationDelay: '100ms' }}>
           An all-in-one platform to track memberships, automate payment reminders, and retain clients. Built specifically for modern fitness center owners.
         </p>
 
-        <div className="flex flex-col w-full sm:flex-row sm:w-auto gap-4">
+        <div className="flex flex-col sm:flex-row items-center gap-4 animate-fadeIn" style={{ animationDelay: '200ms' }}>
           <button 
             onClick={() => navigate('/login')}
-            className="w-full sm:w-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 active:scale-95 text-white rounded-xl font-semibold shadow-lg shadow-indigo-500/25 transition-all text-lg"
+            className="w-full sm:w-auto px-10 py-4 bg-indigo-500 hover:bg-indigo-600 active:scale-95 text-white rounded-2xl font-bold shadow-2xl shadow-indigo-500/20 transition-all text-base md:text-lg"
           >
-            Get Started
+            Get Started Free
           </button>
+          <div className="text-slate-500 text-sm font-medium">No credit card required</div>
         </div>
       </main>
 
