@@ -42,9 +42,9 @@ export const Members: React.FC = () => {
     return 'badge-success';
   };
 
-  const handleSave = (data: Omit<Member, 'id'>) => {
+  const handleSave = (data: Omit<Member, '_id'>) => {
     if (editingMember) {
-      updateMember(editingMember.id, data);
+      updateMember(editingMember._id, data);
     } else {
       addMember(data);
     }
@@ -119,7 +119,7 @@ export const Members: React.FC = () => {
             const status = getMemberStatus(member.expiryDate);
             return (
               <div
-                key={member.id}
+                key={member._id}
                 className="animate-fadeIn"
                 style={{
                   display: 'grid',
@@ -137,7 +137,7 @@ export const Members: React.FC = () => {
                 {/* Member info */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
                   <img
-                    src={member.avatar || `https://i.pravatar.cc/150?u=${member.id}`}
+                    src={member.avatar || `https://i.pravatar.cc/150?u=${member._id}`}
                     alt={member.name}
                     style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--border)', flexShrink: 0 }}
                   />
@@ -166,7 +166,7 @@ export const Members: React.FC = () => {
                 <button
                   className={`btn ${member.feeStatus === 'Paid' ? 'btn-secondary' : 'btn-danger'}`}
                   style={{ fontSize: 11, padding: '4px 10px', gap: 5, width: 'fit-content' }}
-                  onClick={() => toggleFeeStatus(member.id)}
+                  onClick={() => toggleFeeStatus(member._id)}
                   title="Toggle fee status"
                 >
                   {member.feeStatus === 'Paid'
@@ -180,7 +180,7 @@ export const Members: React.FC = () => {
                   <button className="btn btn-secondary btn-icon" title="Edit" style={{ width: 28, height: 28 }} onClick={() => handleEdit(member)}>
                     <Pencil size={13} />
                   </button>
-                  <button className="btn btn-danger btn-icon" title="Delete" style={{ width: 28, height: 28 }} onClick={() => setDeletingId(member.id)}>
+                  <button className="btn btn-danger btn-icon" title="Delete" style={{ width: 28, height: 28 }} onClick={() => setDeletingId(member._id)}>
                     <Trash2 size={13} />
                   </button>
                 </div>

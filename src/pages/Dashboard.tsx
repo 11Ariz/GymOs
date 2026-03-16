@@ -97,7 +97,7 @@ export const Dashboard: React.FC = () => {
               {stats.expiringSoon.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m.id} style={{
+                  <div key={m._id} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '10px 14px', background: 'var(--warning-bg)',
                     borderRadius: 'var(--radius-sm)', border: '1px solid rgba(245,158,11,0.2)',

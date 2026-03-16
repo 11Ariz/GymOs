@@ -5,7 +5,7 @@ import { addMonths, addYears, format } from 'date-fns';
 
 interface MemberFormProps {
   member?: Member | null;
-  onSave: (data: Omit<Member, 'id'>) => void;
+  onSave: (data: Omit<Member, '_id'>) => void;
   onClose: () => void;
 }
 

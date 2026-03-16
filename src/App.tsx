@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../context/AuthContext';
-import { MemberProvider } from '../context/MemberContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { MemberProvider } from './context/MemberContext';
 import { MainLayout } from './components/layout/MainLayout';
 import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';

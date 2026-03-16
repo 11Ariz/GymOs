@@ -46,11 +46,11 @@ export const Reminders: React.FC = () => {
   // Send reminder to a single member
   const sendOne = useCallback(async (m: (typeof members)[0]) => {
     if (!m.email) {
-      setSend(m.id, 'error');
-      setTimeout(() => setSend(m.id, 'idle'), 3000);
+      setSend(m._id, 'error');
+      setTimeout(() => setSend(m._id, 'idle'), 3000);
       return;
     }
-    setSend(m.id, 'loading');
+    setSend(m._id, 'loading');
     try {
       const res = await fetch(`${API}/api/email/send-reminder`, {
         method: 'POST',
@@ -58,11 +58,11 @@ export const Reminders: React.FC = () => {
         body: JSON.stringify({ name: m.name, email: m.email, plan: m.plan, expiryDate: m.expiryDate, feeStatus: m.feeStatus }),
       });
       const data = await res.json();
-      setSend(m.id, data.success ? 'success' : 'error');
+      setSend(m._id, data.success ? 'success' : 'error');
     } catch {
-      setSend(m.id, 'error');
+      setSend(m._id, 'error');
     }
-    setTimeout(() => setSend(m.id, 'idle'), 3500);
+    setTimeout(() => setSend(m._id, 'idle'), 3500);
   }, []);
 
   // Send reminders to all members in a group
@@ -156,7 +156,7 @@ export const Reminders: React.FC = () => {
               {group.members.map(m => {
                 const days = differenceInDays(new Date(m.expiryDate), today);
                 return (
-                  <div key={m.id} style={{
+                  <div key={m._id} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '10px 14px', background: group.bg,
                     borderRadius: 'var(--radius-sm)',
@@ -164,7 +164,7 @@ export const Reminders: React.FC = () => {
                     gap: 12,
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-                      <img src={m.avatar || `https://i.pravatar.cc/150?u=${m.id}`} alt={m.name}
+                      <img src={m.avatar || `https://i.pravatar.cc/150?u=${m._id}`} alt={m.name}
                         style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
                       />
                       <div style={{ minWidth: 0 }}>
@@ -182,7 +182,7 @@ export const Reminders: React.FC = () => {
                       <span className={`badge ${m.feeStatus === 'Paid' ? 'badge-success' : 'badge-danger'}`}>
                         {m.feeStatus}
                       </span>
-                      <SendBtn id={m.id} member={m} />
+                      <SendBtn id={m._id} member={m} />
                     </div>
                   </div>
                 );
