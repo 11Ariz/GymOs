@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMembers } from '../context/MemberContext';
 import { StatCard } from '../components/ui/StatCard';
-import { Users, AlertTriangle, CreditCard, TrendingUp, Clock, CheckCircle, ArrowRight } from 'lucide-react';
+import { Users, CreditCard, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import { differenceInDays } from 'date-fns';
 
 export const Dashboard: React.FC = () => {
@@ -35,26 +35,34 @@ export const Dashboard: React.FC = () => {
         <StatCard 
           label="Total Members" 
           value={stats.total} 
-          icon={Users} 
-          color="indigo" 
+          icon={<Users className="w-5 h-5 text-indigo-400" />} 
+          iconBg="rgba(129, 140, 248, 0.15)"
+          iconGlow="rgba(129, 140, 248, 0.3)"
+          delay={0}
         />
         <StatCard 
           label="Paid (This Month)" 
           value={stats.paid} 
-          icon={CheckCircle} 
-          color="emerald" 
+          icon={<CheckCircle className="w-5 h-5 text-emerald-400" />} 
+          iconBg="rgba(16, 185, 129, 0.15)"
+          iconGlow="rgba(16, 185, 129, 0.3)"
+          delay={100}
         />
         <StatCard 
           label="Pending Payments" 
           value={stats.pending} 
-          icon={CreditCard} 
-          color="rose" 
+          icon={<CreditCard className="w-5 h-5 text-rose-400" />} 
+          iconBg="rgba(244, 63, 94, 0.15)"
+          iconGlow="rgba(244, 63, 94, 0.3)"
+          delay={200}
         />
         <StatCard 
           label="Next 7 Days Expiry" 
           value={stats.expiringSoon.length} 
-          icon={Clock} 
-          color="amber" 
+          icon={<Clock className="w-5 h-5 text-amber-400" />} 
+          iconBg="rgba(245, 158, 11, 0.15)"
+          iconGlow="rgba(245, 158, 11, 0.3)"
+          delay={300}
         />
       </div>
 
