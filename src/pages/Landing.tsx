@@ -53,30 +53,30 @@ export const Landing: React.FC = () => {
       </main>
 
       {/* Feature Grid - Mobile Stacked, Desktop Grid */}
-      <section className="max-w-6xl mx-auto px-4 py-20 border-t border-white/5">
+      <section className="max-w-6xl mx-auto px-4 py-20 lg:py-32 border-t border-white/5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-4">
-              <Users className="text-emerald-400 w-6 h-6" />
+          <div className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all duration-300 h-full flex flex-col">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Users className="text-emerald-400 w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Member Tracking</h3>
-            <p className="text-slate-400 leading-relaxed">Easily add, manage, and search through thousands of active and expired members on any device.</p>
+            <h3 className="text-2xl font-bold mb-3 text-white">Member Tracking</h3>
+            <p className="text-slate-400 leading-relaxed text-base">Easily add, manage, and search through thousands of active and expired members on any device.</p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mb-4">
-              <TrendingUp className="text-amber-400 w-6 h-6" />
+          <div className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-amber-500/30 transition-all duration-300 h-full flex flex-col">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <TrendingUp className="text-amber-400 w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Fee Management</h3>
-            <p className="text-slate-400 leading-relaxed">Quickly view who has paid and who is pending. Send single or bulk automated email reminders instantly.</p>
+            <h3 className="text-2xl font-bold mb-3 text-white">Fee Management</h3>
+            <p className="text-slate-400 leading-relaxed text-base">Quickly view who has paid and who is pending. Send single or bulk automated email reminders instantly.</p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-4">
-              <ShieldCheck className="text-indigo-400 w-6 h-6" />
+          <div className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all duration-300 h-full flex flex-col">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <ShieldCheck className="text-indigo-400 w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Cloud Synced</h3>
-            <p className="text-slate-400 leading-relaxed">Everything is securely backed up and isolated. Access your gym's data securely from anywhere.</p>
+            <h3 className="text-2xl font-bold mb-3 text-white">Cloud Synced</h3>
+            <p className="text-slate-400 leading-relaxed text-base">Everything is securely backed up and isolated. Access your gym's data securely from anywhere.</p>
           </div>
         </div>
       </section>
