@@ -3,7 +3,7 @@ import { useMembers } from '../context/MemberContext';
 import { differenceInDays } from 'date-fns';
 import { BellRing, Clock, AlertOctagon, CheckCircle2, Send, Loader2 } from 'lucide-react';
 
-const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API = import.meta.env.VITE_API_URL || '';
 
 type SendState = 'idle' | 'loading' | 'success' | 'error';
 
