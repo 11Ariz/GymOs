@@ -352,7 +352,6 @@ p { color: var(--text-secondary); line-height: 1.6; }
 
 /* responsive helpers */
 @media (max-width: 767px) {
-  .md\:hidden { display: none !important; }
   .hidden { display: none; }
 }
 @media (min-width: 768px) {
