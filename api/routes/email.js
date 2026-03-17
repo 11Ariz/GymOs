@@ -10,32 +10,48 @@ const router = express.Router();
 router.use(protect);
 
 // Create reusable transporter
-const createTransporter = () => {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    throw new Error('Email credentials (GMAIL_USER/GMAIL_APP_PASSWORD) are missing in environment variables.');
+const createTransporter = async () => {
+  if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
+  } else {
+    // Fallback to test ethereal account if no credentials are provided
+    console.warn('⚠️ No Gmail credentials provided. Using Ethereal email for testing.');
+    const testAccount = await nodemailer.createTestAccount();
+    return nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
   }
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
 };
 
 // Helper: send one email
 async function sendReminderEmail(member) {
   if (!member.email) throw new Error(`No email address for member: ${member.name}`);
 
-  const transporter = createTransporter();
+  const transporter = await createTransporter();
   const html = emailTemplate(member);
 
-  await transporter.sendMail({
-    from: `"GymOS" <${process.env.GMAIL_USER}>`,
+  const info = await transporter.sendMail({
+    from: `"GymOS" <${process.env.GMAIL_USER || 'no-reply@ethereal.email'}>`,
     to: member.email,
     subject: `🏋️ GymOS – Membership Reminder for ${member.name}`,
     html,
   });
+
+  if (!process.env.GMAIL_USER) {
+    console.log(`Preview URL: %s`, nodemailer.getTestMessageUrl(info));
+  }
 }
 
 // POST /api/email/send-reminder  — single member

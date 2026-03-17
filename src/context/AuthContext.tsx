@@ -23,15 +23,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('gymos_user');
-    if (storedUser) {
-      try {
+    try {
+      const storedUser = localStorage.getItem('gymos_user');
+      if (storedUser) {
         setUser(JSON.parse(storedUser));
-      } catch (e) {
-        localStorage.removeItem('gymos_user');
       }
+    } catch (e) {
+      localStorage.removeItem('gymos_user');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const login = (userData: User) => {
@@ -45,9 +46,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     window.location.href = '/login';
   };
 
+  // Always render children — show a full-screen loader instead of null
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {!loading && children}
+      {loading ? (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          background: '#0a0b0f',
+          color: '#8b5cf6',
+          fontSize: 14,
+          fontFamily: 'Inter, sans-serif',
+          gap: 12
+        }}>
+          <svg viewBox="0 0 24 24" style={{ width: 20, height: 20, animation: 'spin 0.8s linear infinite' }}>
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="3" strokeDasharray="30 60" />
+          </svg>
+          Loading GymOS…
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      ) : children}
     </AuthContext.Provider>
   );
 };

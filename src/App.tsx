@@ -39,11 +39,12 @@ const App: React.FC = () => {
               </ProtectedRoute>
             } />
 
-            <Route path="/" element={
+            <Route path="/app" element={
               <ProtectedRoute roleRequired="GYM_OWNER">
                 <MainLayout />
               </ProtectedRoute>
             }>
+              <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="members" element={<Members />} />
               <Route path="reminders" element={<Reminders />} />
@@ -59,4 +60,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-// Refresh commit logic fix

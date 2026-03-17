@@ -77,7 +77,7 @@ export const Dashboard: React.FC = () => {
             </div>
             <button
               className="btn btn-secondary h-8 px-3 text-xs"
-              onClick={() => navigate('/reminders')}
+              onClick={() => navigate('/app/reminders')}
             >
               View All <ArrowRight size={14} />
             </button>

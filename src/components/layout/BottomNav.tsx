@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, BellRing } from 'lucide-react';
 
 const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
-  { to: '/members', icon: Users, label: 'Members' },
-  { to: '/reminders', icon: BellRing, label: 'Alerts' },
+  { to: '/app/dashboard', icon: LayoutDashboard, label: 'Home' },
+  { to: '/app/members', icon: Users, label: 'Members' },
+  { to: '/app/reminders', icon: BellRing, label: 'Alerts' },
 ];
 
 export const BottomNav: React.FC = () => {

@@ -2,18 +2,19 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useMembers } from '../../context/MemberContext';
 import { useAuth } from '../../context/AuthContext';
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut, Menu } from 'lucide-react';
 
 interface HeaderProps {
+  toggleSidebar?: () => void;
 }
 
 const pageTitles: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/members': 'Members',
-  '/reminders': 'Reminders',
+  '/app/dashboard': 'Dashboard',
+  '/app/members': 'Members',
+  '/app/reminders': 'Reminders',
 };
 
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   const location = useLocation();
   const { members } = useMembers();
   const { user, logout } = useAuth();
@@ -29,7 +30,15 @@ export const Header: React.FC<HeaderProps> = () => {
 
   return (
     <header className="h-16 md:h-20 shrink-0 border-b border-slate-800 px-4 md:px-8 bg-slate-900/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
+        {toggleSidebar && (
+          <button 
+            onClick={toggleSidebar}
+            className="p-2 -ml-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
         <div>
           <h1 className="text-lg md:text-xl font-bold text-white shrink-0 truncate max-w-[150px] sm:max-w-xs">{title}</h1>
           <p className="text-xs text-slate-400 hidden sm:block">

@@ -1,106 +1,111 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Member } from '../types';
-import api from '../api';
-import { useAuth } from './AuthContext';
-import toast from 'react-hot-toast';
 
 interface MemberContextType {
   members: Member[];
-  loading: boolean;
-  fetchMembers: () => Promise<void>;
-  addMember: (member: Omit<Member, '_id'>) => Promise<boolean>;
-  updateMember: (id: string, member: Partial<Member>) => Promise<boolean>;
-  deleteMember: (id: string) => Promise<boolean>;
-  toggleFeeStatus: (id: string) => Promise<boolean>;
+  addMember: (member: Omit<Member, '_id'>) => void;
+  updateMember: (_id: string, member: Partial<Member>) => void;
+  deleteMember: (_id: string) => void;
+  toggleFeeStatus: (_id: string) => void;
 }
+
+const today = new Date();
+const fmt = (d: Date) => d.toISOString().split('T')[0];
+const addDays = (d: Date, n: number) => { const r = new Date(d); r.setDate(r.getDate() + n); return r; };
+const addMonths = (d: Date, n: number) => { const r = new Date(d); r.setMonth(r.getMonth() + n); return r; };
+const addYears = (d: Date, n: number) => { const r = new Date(d); r.setFullYear(r.getFullYear() + n); return r; };
+
+const initialMembers: Member[] = [
+  {
+    _id: '1',
+    name: 'Alex Johnson',
+    email: 'alex.j@example.com',
+    phone: '+1 234-567-8901',
+    plan: 'Yearly',
+    joinDate: fmt(addYears(today, -1)),
+    expiryDate: fmt(addDays(today, 120)),
+    feeStatus: 'Paid',
+    avatar: 'https://i.pravatar.cc/150?u=alex1'
+  },
+  {
+    _id: '2',
+    name: 'Sarah Smith',
+    email: 'sarah.s@example.com',
+    phone: '+1 234-567-8902',
+    plan: 'Monthly',
+    joinDate: fmt(addDays(today, -25)),
+    expiryDate: fmt(addDays(today, 5)),
+    feeStatus: 'Pending',
+    avatar: 'https://i.pravatar.cc/150?u=sarah2'
+  },
+  {
+    _id: '3',
+    name: 'Mike Brown',
+    email: 'mike.b@example.com',
+    phone: '+1 234-567-8903',
+    plan: 'Quarterly',
+    joinDate: fmt(addMonths(today, -2)),
+    expiryDate: fmt(addDays(today, 2)),
+    feeStatus: 'Paid',
+    avatar: 'https://i.pravatar.cc/150?u=mike3'
+  },
+  {
+    _id: '4',
+    name: 'Priya Patel',
+    email: 'priya.p@example.com',
+    phone: '+1 234-567-8904',
+    plan: 'Monthly',
+    joinDate: fmt(addDays(today, -40)),
+    expiryDate: fmt(addDays(today, -10)),
+    feeStatus: 'Pending',
+    avatar: 'https://i.pravatar.cc/150?u=priya4'
+  },
+  {
+    _id: '5',
+    name: 'Jordan Lee',
+    email: 'jordan.l@example.com',
+    phone: '+1 234-567-8905',
+    plan: 'Yearly',
+    joinDate: fmt(addDays(today, -90)),
+    expiryDate: fmt(addDays(today, 275)),
+    feeStatus: 'Paid',
+    avatar: 'https://i.pravatar.cc/150?u=jordan5'
+  },
+];
 
 const MemberContext = createContext<MemberContextType | undefined>(undefined);
 
 export const MemberProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [members, setMembers] = useState<Member[]>([]);
-  const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const [members, setMembers] = useState<Member[]>(initialMembers);
 
-  const fetchMembers = useCallback(async () => {
-    if (!user || user.role !== 'GYM_OWNER') {
-      setMembers([]);
-      return;
-    }
-    setLoading(true);
-    try {
-      const { data } = await api.get('/api/members');
-      if (data.success) setMembers(data.members);
-    } catch (error) {
-      console.error('Failed to fetch members:', error);
-      toast.error('Failed to load members');
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers]);
-
-  const addMember = async (memberData: Omit<Member, '_id'>) => {
-    try {
-      const { data } = await api.post('/api/members', memberData);
-      if (data.success) {
-        setMembers(prev => [...prev, data.member]);
-        toast.success('Member added successfully');
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Add member error:', error);
-      toast.error('Failed to add member');
-      return false;
-    }
+  const addMember = (memberData: Omit<Member, '_id'>) => {
+    const newMember: Member = {
+      ...memberData,
+      _id: Math.random().toString(36).substr(2, 9),
+    };
+    setMembers(prev => [...prev, newMember]);
   };
 
-  const updateMember = async (id: string, updatedData: Partial<Member>) => {
-    try {
-      const { data } = await api.put(`/api/members/${id}`, updatedData);
-      if (data.success) {
-        setMembers(prev => prev.map(m => m._id === id ? data.member : m));
-        toast.success('Member updated');
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Update member error:', error);
-      toast.error('Failed to update member');
-      return false;
-    }
+  const updateMember = (_id: string, updatedData: Partial<Member>) => {
+    setMembers(prev => prev.map(m => m._id === _id ? { ...m, ...updatedData } : m));
   };
 
-  const deleteMember = async (id: string) => {
-    try {
-      const { data } = await api.delete(`/api/members/${id}`);
-      if (data.success) {
-        setMembers(prev => prev.filter(m => m._id !== id));
-        toast.success('Member deleted');
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Delete member error:', error);
-      toast.error('Failed to delete member');
-      return false;
-    }
+  const deleteMember = (_id: string) => {
+    setMembers(prev => prev.filter(m => m._id !== _id));
   };
 
-  const toggleFeeStatus = async (id: string) => {
-    const member = members.find(m => m._id === id);
-    if (!member) return false;
-    
-    const newStatus = member.feeStatus === 'Paid' ? 'Pending' : 'Paid';
-    return await updateMember(id, { feeStatus: newStatus });
+  const toggleFeeStatus = (_id: string) => {
+    setMembers(prev => prev.map(m => {
+      if (m._id === _id) {
+        return { ...m, feeStatus: m.feeStatus === 'Paid' ? 'Pending' : 'Paid' };
+      }
+      return m;
+    }));
   };
 
   return (
-    <MemberContext.Provider value={{ members, loading, fetchMembers, addMember, updateMember, deleteMember, toggleFeeStatus }}>
+    <MemberContext.Provider value={{ members, addMember, updateMember, deleteMember, toggleFeeStatus }}>
       {children}
     </MemberContext.Provider>
   );

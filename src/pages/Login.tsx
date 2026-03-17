@@ -27,7 +27,7 @@ export const Login: React.FC = () => {
         if (data.user.role === 'SUPERADMIN') {
           navigate('/superadmin');
         } else {
-          navigate('/dashboard');
+          navigate('/app/dashboard');
         }
       }
     } catch (error: any) {
