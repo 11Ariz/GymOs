@@ -16,8 +16,8 @@ export const MainLayout: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex h-screen bg-slate-900 overflow-hidden font-sans text-slate-50">
-      {/* Mobile Backdrop - Only for specialized overlays now */}
+    <div className="flex h-screen bg-slate-900 overflow-hidden font-sans text-slate-50 relative">
+      {/* Mobile Backdrop - completely covers screen */}
       {isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-50 lg:hidden backdrop-blur-sm transition-opacity"

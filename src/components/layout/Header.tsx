@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         {toggleSidebar && (
           <button 
             onClick={toggleSidebar}
-            className="p-2 -ml-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
+            className="p-2 -ml-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition lg:hidden"
           >
             <Menu className="w-5 h-5" />
           </button>
