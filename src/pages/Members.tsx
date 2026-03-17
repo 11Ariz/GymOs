@@ -42,19 +42,32 @@ export const Members: React.FC = () => {
     return 'badge-success';
   };
 
-  const handleSave = (data: Omit<Member, '_id'>) => {
-    if (editingMember) {
-      updateMember(editingMember._id, data);
-    } else {
-      addMember(data);
+  const handleSave = async (data: Omit<Member, '_id'>) => {
+    try {
+      if (editingMember) {
+        await updateMember(editingMember._id, data);
+      } else {
+        await addMember(data);
+      }
+      setShowForm(false);
+      setEditingMember(null);
+    } catch (err) {
+      // Error handled in context by toast
     }
-    setShowForm(false);
-    setEditingMember(null);
   };
 
   const handleEdit = (member: Member) => {
     setEditingMember(member);
     setShowForm(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteMember(id);
+      setDeletingId(null);
+    } catch (err) {
+      // Error handled in context by toast
+    }
   };
 
   return (
@@ -208,7 +221,7 @@ export const Members: React.FC = () => {
         <ConfirmModal
           title="Delete Member"
           message="Are you sure you want to remove this member? This action cannot be undone."
-          onConfirm={() => { deleteMember(deletingId); setDeletingId(null); }}
+          onConfirm={() => handleDelete(deletingId)}
           onClose={() => setDeletingId(null)}
         />
       )}
