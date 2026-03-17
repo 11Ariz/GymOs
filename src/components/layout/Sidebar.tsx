@@ -16,10 +16,10 @@ const navItems = [
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   return (
     <aside className={`
-      fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800
-      transform transition-all duration-300 ease-in-out lg:relative
+      fixed inset-y-0 left-0 z-[60] w-64 bg-slate-900 border-r border-slate-800
+      transform transition-all duration-300 ease-in-out lg:relative lg:z-0
       ${isOpen ? 'translate-x-0 ml-0' : '-translate-x-full lg:-ml-64'}
-      flex flex-col py-6 shadow-2xl lg:shadow-none overflow-hidden
+      flex flex-col py-6 shadow-2xl lg:shadow-none overflow-hidden h-full
     `}>
       {/* Header & Logo */}
       <div className="px-6 pb-6 border-b border-slate-800 mb-4 flex items-center justify-between">

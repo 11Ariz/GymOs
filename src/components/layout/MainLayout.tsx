@@ -20,7 +20,7 @@ export const MainLayout: React.FC = () => {
       {/* Mobile Backdrop - Only for specialized overlays now */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 z-30 lg:hidden backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 bg-black/60 z-50 lg:hidden backdrop-blur-sm transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
