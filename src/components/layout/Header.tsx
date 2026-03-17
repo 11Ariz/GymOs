@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   const getInitials = (name?: string) => name ? name.substring(0, 2).toUpperCase() : 'GO';
 
   return (
-    <header className="h-16 md:h-20 shrink-0 border-b border-slate-800 px-4 md:px-8 bg-slate-900/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-20">
+    <header className="h-16 md:h-20 shrink-0 border-b border-slate-800 px-4 md:px-8 bg-slate-900/80 backdrop-blur-xl flex items-center justify-between sticky top-0 z-40">
       <div className="flex items-center gap-2 md:gap-3">
         {toggleSidebar && (
           <button 
